@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE ROOFTOP ARENA - Menu & Order</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial, sans-serif;background:#080808;color:#fff}
+    header{padding:28px 16px;text-align:center;background:linear-gradient(135deg,#111,#000);border-bottom:2px solid #d79b25}
+    .logo{font-size:34px;font-weight:900;letter-spacing:2px;color:#fff}
+    .logo span{color:#d79b25}
+    .tag{color:#ddd;margin-top:6px}
+    .contact{margin-top:10px;color:#d79b25;font-weight:bold}
+    .wrap{max-width:1100px;margin:auto;padding:18px}
+    .hero{background:#151515;border:1px solid #d79b25;border-radius:18px;padding:18px;margin:18px 0;text-align:center}
+    .hero h2{margin:0 0 8px;color:#d79b25}
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+    .section{margin-bottom:20px}
+    .section h2{border-left:5px solid #d79b25;padding-left:10px;color:#d79b25}
+    .items{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+    .card{background:#151515;border:1px solid #333;border-radius:14px;padding:14px;box-shadow:0 3px 12px rgba(0,0,0,.3)}
+    .card:hover{border-color:#d79b25}
+    .name{font-size:16px;font-weight:700;min-height:38px}
+    .price{color:#d79b25;font-size:20px;font-weight:900;margin:8px 0}
+    button{border:0;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer}
+    .add{background:#d79b25;color:#000;width:100%}
+    .cart{position:sticky;top:14px;background:#111;border:1px solid #d79b25;border-radius:18px;padding:16px;height:max-content}
+    .cart h2{margin-top:0;color:#d79b25}
+    .cart-item{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #333;padding:10px 0;font-size:14px}
+    .qty button{padding:4px 8px;margin:0 3px;background:#333;color:white}
+    .total{font-size:22px;color:#d79b25;font-weight:900;margin:14px 0}
+    .whatsapp{background:#20c65a;color:white;width:100%;font-size:16px}
+    .clear{background:#333;color:white;width:100%;margin-top:8px}
+    input, textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#050505;color:#fff;margin:6px 0 10px}
+    footer{text-align:center;padding:25px;color:#aaa;border-top:1px solid #333;margin-top:20px}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}.cart{position:static}.logo{font-size:26px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">THE ROOFTOP <span>ARENA</span></div>
+  <div class="tag">Good Food • Good Mood • Good View</div>
+  <div class="contact">Call / WhatsApp: 6386889752, 6393568798</div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h2>Scan, Select & Order on WhatsApp</h2>
+    <p>Add items to cart and send your order directly on WhatsApp.</p>
+  </div>
+
+  <div class="grid">
+    <main id="menu"></main>
+
+    <aside class="cart">
+      <h2>Your Cart</h2>
+      <div id="cartList">No items added yet.</div>
+      <div class="total">Total: ₹<span id="total">0</span></div>
+
+      <label>Your Name</label>
+      <input id="custName" placeholder="Enter your name">
+
+      <label>Table No. / Address</label>
+      <textarea id="custAddress" rows="3" placeholder="Table no. or delivery address"></textarea>
+
+      <button class="whatsapp" onclick="sendOrder()">Order on WhatsApp</button>
+      <button class="clear" onclick="clearCart()">Clear Cart</button>
+    </aside>
+  </div>
+</div>
+
+<footer>
+  THE ROOFTOP ARENA • Bhojubeer Panchkoshi Road, Varanasi • Instagram: @rooftoparena.vns
+</footer>
+
+<script>
+const items = [{"cat": "Combo", "name": "Sandwich + French Fries + Cold Drink", "price": 189}, {"cat": "Combo", "name": "Burger + French Fries + Cold Drink", "price": 159}, {"cat": "Combo", "name": "Pizza + Burger + French Fries + Cold Drink/Shake", "price": 349}, {"cat": "Combo", "name": "Pizza + Energy Drink", "price": 149}, {"cat": "Combo", "name": "Pizza + French Fries + Cold Drink", "price": 230}, {"cat": "Noodles", "name": "Veg Noodles", "price": 149}, {"cat": "Noodles", "name": "Paneer Noodles", "price": 189}, {"cat": "Noodles", "name": "Garlic Noodles", "price": 159}, {"cat": "Noodles", "name": "Bangkok Noodles", "price": 159}, {"cat": "Noodles", "name": "Hakka Noodles", "price": 159}, {"cat": "Rice", "name": "Veg Rice", "price": 149}, {"cat": "Rice", "name": "Paneer Rice", "price": 189}, {"cat": "Rice", "name": "Rizwan Rice", "price": 159}, {"cat": "Rice", "name": "Mix Veg Rice", "price": 199}, {"cat": "Fries & Snacks", "name": "French Fries", "price": 99}, {"cat": "Fries & Snacks", "name": "French Fries Peri Peri", "price": 129}, {"cat": "Fries & Snacks", "name": "Baby Corn Crispy", "price": 249}, {"cat": "Fries & Snacks", "name": "Honey Chilli Potato", "price": 249}, {"cat": "Sandwich", "name": "Veg Sandwich", "price": 70}, {"cat": "Sandwich", "name": "Paneer Sandwich", "price": 99}, {"cat": "Sandwich", "name": "Masala Sandwich", "price": 109}, {"cat": "Sandwich", "name": "Paneer Patiala Sandwich", "price": 169}, {"cat": "Sandwich", "name": "Club Sandwich", "price": 160}, {"cat": "Burger", "name": "Veg Burger", "price": 59}, {"cat": "Burger", "name": "Cheese Burger", "price": 79}, {"cat": "Burger", "name": "Loaded Burger", "price": 99}, {"cat": "Burger", "name": "Paneer Burger", "price": 79}, {"cat": "Shake", "name": "Banana Shake", "price": 99}, {"cat": "Shake", "name": "Chocolate Shake", "price": 119}, {"cat": "Shake", "name": "Cold Coffee", "price": 99}, {"cat": "Shake", "name": "Oreo Shake", "price": 129}, {"cat": "Shake", "name": "Mango Shake", "price": 99}, {"cat": "Shake", "name": "Pineapple Shake", "price": 119}, {"cat": "Mojito", "name": "Lemon Mojito", "price": 99}, {"cat": "Mojito", "name": "Blue Lagoon", "price": 189}, {"cat": "Mojito", "name": "Mojito Masala Soda", "price": 119}, {"cat": "Soft Drink", "name": "Cold Drinks", "price": 49}, {"cat": "Soft Drink", "name": "Energy Drink", "price": 99}, {"cat": "Soft Drink", "name": "Water Bottle 500ML", "price": 20}];
+let cart = [];
+
+function renderMenu(){
+  const menu = document.getElementById('menu');
+  const cats = [...new Set(items.map(i=>i.cat))];
+  menu.innerHTML = cats.map(cat => `
+    <section class="section">
+      <h2>${cat}</h2>
+      <div class="items">
+        ${items.filter(i=>i.cat===cat).map(i => `
+          <div class="card">
+            <div class="name">${i.name}</div>
+            <div class="price">₹${i.price}</div>
+            <button class="add" onclick="addToCart('${i.name.replace(/'/g, "\\'")}', ${i.price})">Add to Cart</button>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `).join('');
+}
+
+function addToCart(name, price){
+  const found = cart.find(i=>i.name===name);
+  if(found) found.qty++;
+  else cart.push({name, price, qty:1});
+  renderCart();
+}
+
+function changeQty(name, diff){
+  const item = cart.find(i=>i.name===name);
+  if(!item) return;
+  item.qty += diff;
+  if(item.qty <= 0) cart = cart.filter(i=>i.name!==name);
+  renderCart();
+}
+
+function renderCart(){
+  const list = document.getElementById('cartList');
+  if(cart.length===0){
+    list.innerHTML = 'No items added yet.';
+    document.getElementById('total').textContent = 0;
+    return;
+  }
+  let total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
+  document.getElementById('total').textContent = total;
+  list.innerHTML = cart.map(i=>`
+    <div class="cart-item">
+      <div><b>${i.name}</b><br>₹${i.price} x ${i.qty}</div>
+      <div class="qty">
+        <button onclick="changeQty('${i.name.replace(/'/g, "\\'")}',-1)">-</button>
+        <button onclick="changeQty('${i.name.replace(/'/g, "\\'")}',1)">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function sendOrder(){
+  if(cart.length===0){ alert('Please add items first'); return; }
+  const name = document.getElementById('custName').value || 'Customer';
+  const addr = document.getElementById('custAddress').value || 'Not provided';
+  const total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
+  let msg = `New Order - THE ROOFTOP ARENA%0A%0AName: ${encodeURIComponent(name)}%0ATable/Address: ${encodeURIComponent(addr)}%0A%0AOrder:%0A`;
+  cart.forEach(i=>{
+    msg += `${encodeURIComponent(i.name)} x ${i.qty} = ₹${i.price*i.qty}%0A`;
+  });
+  msg += `%0ATotal: ₹${total}`;
+  window.open(`https://wa.me/916386889752?text=${msg}`, '_blank');
+}
+
+function clearCart(){ cart=[]; renderCart(); }
+
+renderMenu();
+</script>
+</body>
+</html>
